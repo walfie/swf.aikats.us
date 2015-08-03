@@ -1,9 +1,8 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Aikatsu!</title>
+<meta charset="UTF-8">
+<title>swf.aikats.us</title>
 <style>
 html, body, #container {
   margin: 0;
@@ -20,7 +19,12 @@ body {
 </style>
 </head>
 <body>
-<div id="container"></div>
+<div id="container" style="visibility: hidden;">
+  <ul>
+    <li><a href="?f=ichigo_fly">ichigo_fly</a></li>
+    <li><a href="?f=ran_spin&w=500&h=500">ran_spin</a></li>
+  </ul>
+</div>
 
 <script>
 // https://developer.mozilla.org/en-US/docs/Web/API/URLUtils/search
@@ -32,8 +36,6 @@ for (var aItKey, nKeyId = 0, aCouples = location.search.substr(1).split("&"); nK
   window.params[decodeURIComponent(aItKey[0])] = aItKey.length > 1 ? decodeURIComponent(aItKey[1]) : "";
 }
 }());
-
-
 </script>
 
 <script>
@@ -48,26 +50,35 @@ window.loadJS = function(url, cb) {
   script.onload = cb;
 };
 
-window.loadJS('https://www.gstatic.com/swiffy/v7.2.0/runtime.js', function() {
-  var stage;
-  var params = window.params;
-
-  var file = window.location.hash.substring(1) || params.file || params.f || 'ichigo_fly';
+(function() {
+  var file = window.location.hash.substring(1) || params.file || params.f;
   var div = document.getElementById('container');
   div.style.width = !isNaN(params.w) && params.w + 'px' || '100%';
   div.style.height = !isNaN(params.h) && params.h + 'px' || '100%';
 
-  var initStage = function(file) {
-    window.loadJS('js/' + file + '.js', function() {
-      if (stage) { stage.destroy(); }
+  // No file specified -- unhide the links
+  if (!file) { div.style.visibility = ''; }
 
-      stage = new swiffy.Stage(div, swiffyobject);
-      stage.start();
-    });
-  };
+  // File specified -- load the js and initialize the stage
+  file && window.loadJS('https://www.gstatic.com/swiffy/v7.2.0/runtime.js', function() {
+    var stage;
+    var params = window.params;
 
-  initStage(file);
-});
+    var initStage = function(file) {
+      window.loadJS('js/' + file + '.js', function() {
+        div.innerHTML = '';
+        div.style.visibility = '';
+        document.title = file + ' - swf.aikats.us ';
+        if (stage) { stage.destroy(); }
+
+        stage = new swiffy.Stage(div, swiffyobject);
+        stage.start();
+      });
+    };
+
+    file && initStage(file);
+  });
+}());
 </script>
 </body>
 </html>
