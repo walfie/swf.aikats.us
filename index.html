@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Aikatsu!</title>
+<style>
+html, body, #container {
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+</style>
+</head>
+<body>
+<div id="container"></div>
+
+<script>
+window.loadJS = function(url, cb) {
+  var script = document.createElement('script');
+  var ref = document.querySelector('script');
+  script.async = true;
+  script.src = url;
+
+  ref.parentNode.insertBefore(script, ref);
+
+  script.onload = cb;
+};
+
+window.loadFromHash = function(cb) {
+  var hash = window.location.hash.substring(1);
+  hash && window.loadJS('js/' + hash + '.js', cb);
+}
+
+window.loadJS('https://www.gstatic.com/swiffy/v7.2.0/runtime.js', function() {
+  var stage;
+  var div = document.getElementById('container');
+
+  var initStage = function() {
+    if (stage) { stage.destroy(); }
+
+    stage = new swiffy.Stage(div, swiffyobject);
+    stage.start();
+  };
+
+  window.loadFromHash(initStage);
+  window.onhashchange = function() { loadFromHash(initStage) };
+});
+</script>
+</body>
+</html>
+
