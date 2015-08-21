@@ -29,6 +29,7 @@ body {
   <ul>
     <li><a href="?f=ichigo_fly&w=640">ichigo_fly</a></li>
     <li><a href="?f=ran_spin&w=500&h=500">ran_spin</a></li>
+    <li><a href="?f=kokone&w=640&h=480">kokone</a></li>
   </ul>
 </div>
 
@@ -66,7 +67,7 @@ window.loadJS = function(url, cb) {
   if (!file) { div.style.visibility = ''; }
 
   // File specified -- load the js and initialize the stage
-  file && window.loadJS('https://www.gstatic.com/swiffy/v7.2.0/runtime.js', function() {
+  file && window.loadJS('https://www.gstatic.com/swiffy/v7.3.0/runtime.js', function() {
     var stage;
     var params = window.params;
 
